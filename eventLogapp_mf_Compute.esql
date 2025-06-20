@@ -1,0 +1,16 @@
+
+CREATE COMPUTE MODULE eventLogapp_mf_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	
+	 declare ref1 reference to InputRoot.XMLNSC;	
+	declare char1 CHARACTER cast(ASBITSTREAM(ref1) as CHARACTER CCSID InputRoot.Properties.CodedCharSetId);
+	log event severity 1 catalog 'BIPMSG' Message 2951 values ('request :'||char1);
+		set OutputRoot.JSON.Data=InputRoot.XMLNSC;
+		
+		declare ref2 REFERENCE to OutputRoot.JSON.Data;
+		declare char2 CHARACTER cast(ASBITSTREAM(ref2) as CHARACTER CCSID InputRoot.Properties.CodedCharSetId);
+	log event severity 1 catalog 'BIPMSG' Message 2951 values ('response :' ||char2);
+		RETURN TRUE;
+	END;
+END MODULE;
